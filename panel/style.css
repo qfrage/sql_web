@@ -94,3 +94,38 @@ body {
         margin-left: 0;
     }
 }
+
+/* Стили для элементов li и span */
+li {
+    display: block;
+    margin-bottom: 10px;
+}
+
+span {
+    display: block;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Стили для вложенных списков */
+.nested {
+    display: none;
+    list-style-type: none;
+    margin-left: 1em;
+}
+
+.nested li {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.nested span {
+    display: block;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+/* Добавляем стиль для активного элемента */
+.active {
+    display: block;
+}

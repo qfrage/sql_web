@@ -18,12 +18,12 @@ const connection = mysql.createConnection({
     database: 'sql_web'
 });
 connection.connect((err) => {
-    if (err) throw err;
+    if (err) return console.log("Error MySQL");
     console.log('Connected to MySQL database!');
 });
 
 app.get('/', (req, res) => {
-    if(req.session.isAuthenticated) res.sendFile(__dirname + '/panel/main_page.html');
+    if (req.session.isAuthenticated) res.sendFile(__dirname + '/panel/main_page.html');
     else res.sendFile(__dirname + '/login_page/index.html');
 });
 app.get('/script.js', (req, res) => {
@@ -58,7 +58,7 @@ app.post('/login', (req, res) => {
         'SELECT * FROM admins WHERE login = ? AND password = ?',
         [username, password],
         (error, results, fields) => {
-            if (error) throw error;
+            if (error) console.log(error);
 
             if (results.length > 0) {
                 req.session.isAuthenticated = true; // Устанавливаем флаг аутентификации в сессии
