@@ -23,7 +23,8 @@ connection.connect((err) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/login_page/index.html');
+    if(req.session.isAuthenticated) res.sendFile(__dirname + '/panel/main_page.html');
+    else res.sendFile(__dirname + '/login_page/index.html');
 });
 app.get('/script.js', (req, res) => {
     res.sendFile(__dirname + '/login_page/script.js');
