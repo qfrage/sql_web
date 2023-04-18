@@ -38,6 +38,13 @@ app.get('/panel/main_page', (req, res) => {
         res.redirect('/');
     }
 });
+app.get('/panel/style.css', (req, res) => {
+    if (req.session.isAuthenticated) {
+        res.sendFile(__dirname + '/panel/style.css');
+    } else {
+        res.redirect('/');
+    }
+});
 
 app.get('/panel/script.js', (req, res) => {
     res.sendFile(__dirname + '/panel/script.js');
