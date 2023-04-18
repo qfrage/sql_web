@@ -1,12 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-    <script src = "script.js"></script>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="logo.png" alt="Logo" />
+            <h1>Admin Panel</h1>
+        </div>
+        <ul class="menu">
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#users">Users</a></li>
+            <li><a href="#orders">Orders</a></li>
+            <li><a href="#settings">Settings</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div id="dashboard" class="tabcontent">
+            <h2>Dashboard</h2>
+            <p>This is the dashboard.</p>
+        </div>
+        <div id="users" class="tabcontent">
+            <h2>Users</h2>
+            <p>This is the users page.</p>
+        </div>
+        <div id="orders" class="tabcontent">
+            <h2>Orders</h2>
+            <p>This is the orders page.</p>
+        </div>
+        <div id="settings" class="tabcontent">
+            <h2>Settings</h2>
+            <p>This is the settings page.</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
+
 </html>
