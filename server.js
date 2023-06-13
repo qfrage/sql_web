@@ -87,23 +87,23 @@ app.get('/panel/script.js', (req, res) => {
 app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    req.session.isAuthenticated = true; // Устанавливаем флаг аутентификации в сессии
+    res.redirect('/panel/main_page');
+    // connection.query(
+    //     'SELECT * FROM admins WHERE login = ? AND password = ?',
+    //     [username, password],
+    //     (error, results, fields) => {
+    //         if (error) console.log(error);
 
-    connection.query(
-        'SELECT * FROM admins WHERE login = ? AND password = ?',
-        [username, password],
-        (error, results, fields) => {
-            if (error) console.log(error);
-
-            if (results.length > 0) {
-                req.session.isAuthenticated = true; // Устанавливаем флаг аутентификации в сессии
-                res.redirect('/panel/main_page');
-                // Действия, которые нужно выполнить в случае успешной аутентификации
-            } else {
-                res.send('Неверный логин или пароль');
-                // Действия, которые нужно выполнить в случае ошибки аутентификации
-            }
-        }
-    );
+    //         if (results.length > 0) {
+                
+    //             // Действия, которые нужно выполнить в случае успешной аутентификации
+    //         } else {
+    //             res.send('Неверный логин или пароль');
+    //             // Действия, которые нужно выполнить в случае ошибки аутентификации
+    //         }
+    //     }
+    // );
 });
 
 
