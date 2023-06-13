@@ -80,6 +80,21 @@ app.get('/panel/style.css', (req, res) => {
     }
 });
 
+// Обработчик GET-запроса на /api/faq
+app.get('/api/faq', (req, res) => {
+    const sql = 'SELECT * FROM faqs';
+    connectToDB();
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Ошибка при получении данных' });
+      } else {
+        res.json(rows);
+      }
+    });
+    closeDBConnection();
+  });
+
 app.get('/panel/script.js', (req, res) => {
     res.sendFile(__dirname + '/panel/script.js');
 });
