@@ -30,6 +30,7 @@ for (const tabLink of tabLinks) {
     tabLink.addEventListener("click", function (e) {
         e.preventDefault();
         const tabId = this.getAttribute("href").substring(1);
+        
 
         // Remove the active class from all tablinks
         for (const tabLink of tabLinks) {
@@ -46,5 +47,8 @@ for (const tabLink of tabLinks) {
 
         // Show the selected tabcontent
         document.getElementById(tabId).classList.add("active");
+        if(tabId == "faqs"){
+               
+        }
     });
 }

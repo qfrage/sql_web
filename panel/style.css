@@ -95,6 +95,22 @@ body {
     }
 }
 
+.faq_table {
+    margin-top:30px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
 /* Стили для элементов li и span */
 li {
     display: block;
