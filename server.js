@@ -1,8 +1,53 @@
 const express = require('express');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const app = express();
 const session = require('express-session');
+const sqlite3 = require('sqlite3').verbose();
+const dbPath = './database.db';
+var db = -1;
+
+// Создание подключения
+function connectToDB(){
+    db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+        if (err) {
+            console.error(err.message);
+            return;
+        }
+        console.log('Подключено к базе данных');
+    });
+}
+function closeDBConnection(){
+    db.close((err) => {
+        if (err) {
+            console.error(err.message);
+            return;
+        }
+        console.log('Соединение с базой данных закрыто');
+    });
+}
+
+
+function getAllQuestions(){
+    const query = 'SELECT * FROM questions';
+
+    db.all(query, [], (err, rows) => {
+      if (err) {
+        console.error(err.message);
+        return;
+      }
+      
+      // Выводим результат в консоль
+      rows.forEach((row) => {
+        console.log(row.user_id);
+      });
+    });
+}
+
+
+
+
+
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
@@ -10,17 +55,6 @@ app.use(session({
     resave: false, // Не сохранять сессию, если она не изменилась
     saveUninitialized: false // Не сохранять пустую сессию
 }));
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'sql_web'
-});
-connection.connect((err) => {
-    if (err) return console.log("Error MySQL");
-    console.log('Connected to MySQL database!');
-});
 
 app.get('/', (req, res) => {
     if (req.session.isAuthenticated) res.sendFile(__dirname + '/panel/main_page.html');
