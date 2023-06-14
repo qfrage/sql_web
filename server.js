@@ -1,8 +1,55 @@
 const express = require('express');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const app = express();
 const session = require('express-session');
+const sqlite3 = require('sqlite3').verbose();
+const dbPath = './database.db';
+const app = express();
+
+app.use(bodyParser.json());
+var db = -1;
+
+// Создание подключения
+function connectToDB(){
+    db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+        if (err) {
+            console.error(err.message);
+            return;
+        }
+        console.log('Подключено к базе данных');
+    });
+}
+function closeDBConnection(){
+    db.close((err) => {
+        if (err) {
+            console.error(err.message);
+            return;
+        }
+        console.log('Соединение с базой данных закрыто');
+    });
+}
+
+
+function getAllQuestions(){
+    const query = 'SELECT * FROM questions';
+
+    db.all(query, [], (err, rows) => {
+      if (err) {
+        console.error(err.message);
+        return;
+      }
+      
+      // Выводим результат в консоль
+      rows.forEach((row) => {
+        console.log(row.user_id);
+      });
+    });
+}
+
+
+
+
+
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
@@ -10,17 +57,6 @@ app.use(session({
     resave: false, // Не сохранять сессию, если она не изменилась
     saveUninitialized: false // Не сохранять пустую сессию
 }));
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'sql_web'
-});
-connection.connect((err) => {
-    if (err) return console.log("Error MySQL");
-    console.log('Connected to MySQL database!');
-});
 
 app.get('/', (req, res) => {
     if (req.session.isAuthenticated) res.sendFile(__dirname + '/panel/main_page.html');
@@ -46,6 +82,39 @@ app.get('/panel/style.css', (req, res) => {
     }
 });
 
+// Обработчик HTTP-запроса для обновления записи faq
+app.post('/updateFaq', (req, res) => {
+    connectToDB();
+    const { id,title, content } = req.body; // Получение данных из запроса
+    // Выполнение операции обновления в базе данных
+    const sql = `UPDATE faqs SET title = ?, content = ? WHERE id = ?`;
+    db.run(sql, [title, content, id], function (err) {
+      if (err) {
+        console.error(err.message);
+        res.status(500).send('Произошла ошибка при обновлении записи.');
+      } else {
+        res.send('Запись успешно обновлена.');
+      }
+    });
+  closeDBConnection();
+
+  });
+
+// Обработчик GET-запроса на /api/faq
+app.get('/api/faq', (req, res) => {
+    const sql = 'SELECT * FROM faqs';
+    connectToDB();
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Ошибка при получении данных' });
+      } else {
+        res.json(rows);
+      }
+    });
+    closeDBConnection();
+  });
+
 app.get('/panel/script.js', (req, res) => {
     res.sendFile(__dirname + '/panel/script.js');
 });
@@ -53,23 +122,23 @@ app.get('/panel/script.js', (req, res) => {
 app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    req.session.isAuthenticated = true; // Устанавливаем флаг аутентификации в сессии
+    res.redirect('/panel/main_page');
+    // connection.query(
+    //     'SELECT * FROM admins WHERE login = ? AND password = ?',
+    //     [username, password],
+    //     (error, results, fields) => {
+    //         if (error) console.log(error);
 
-    connection.query(
-        'SELECT * FROM admins WHERE login = ? AND password = ?',
-        [username, password],
-        (error, results, fields) => {
-            if (error) console.log(error);
-
-            if (results.length > 0) {
-                req.session.isAuthenticated = true; // Устанавливаем флаг аутентификации в сессии
-                res.redirect('/panel/main_page');
-                // Действия, которые нужно выполнить в случае успешной аутентификации
-            } else {
-                res.send('Неверный логин или пароль');
-                // Действия, которые нужно выполнить в случае ошибки аутентификации
-            }
-        }
-    );
+    //         if (results.length > 0) {
+                
+    //             // Действия, которые нужно выполнить в случае успешной аутентификации
+    //         } else {
+    //             res.send('Неверный логин или пароль');
+    //             // Действия, которые нужно выполнить в случае ошибки аутентификации
+    //         }
+    //     }
+    // );
 });
 
 
