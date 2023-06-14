@@ -126,6 +126,16 @@ th{
     color:blue;
     cursor:default;
 }
+.faq_remove_btn{
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+.faq_remove_btn:hover{
+    color:blue;
+    cursor:default;
+}
 
 th {
     background-color: #f2f2f2;

@@ -82,6 +82,26 @@ app.get('/panel/style.css', (req, res) => {
     }
 });
 
+// Код на серверній стороні (приклад використання Express.js)
+app.post('/deleteFaq', (req, res) => {
+  connectToDB();
+  const { id } = req.body; // Отримання даних з запиту
+
+  // Виконання операції видалення з бази даних
+  const sql = `DELETE FROM faqs WHERE id = ?`;
+  db.run(sql, [id], function (err) {
+      if (err) {
+          console.error(err.message);
+          res.status(500).send('Помилка при видаленні запису.');
+      } else {
+          res.send('Запис успішно видалено.');
+      }
+  });
+
+  closeDBConnection();
+});
+
+
 // Обработчик HTTP-запроса для обновления записи faq
 app.post('/updateFaq', (req, res) => {
     connectToDB();

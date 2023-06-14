@@ -132,9 +132,12 @@ function fillTable(data) {
       var cell1 = document.createElement('td');
       var cell2 = document.createElement('td');
       var edit_btn = document.createElement('td');
+      var remove_btn = document.createElement('td');
+
       cell1.classList.add('faq_title')
       cell2.classList.add('faq_content')
       edit_btn.classList.add('faq_edit_btn')
+      remove_btn.classList.add('faq_remove_btn');
       cell1.textContent = rowData.question;
       cell2.textContent = rowData.answer;
       edit_btn.faq_id = rowData.sql_id;
@@ -142,11 +145,42 @@ function fillTable(data) {
       edit_btn.question = rowData.question; 
       edit_btn.textContent = 'Редагувати'
       edit_btn.addEventListener('click', openDialogEditFAQ);
-      row.appendChild(cell1);
-      row.appendChild(cell2);
-      row.appendChild(edit_btn);
-      table.appendChild(row);
+      remove_btn.textContent = 'Видалити'
+      remove_btn.faq_id = rowData.sql_id;
+      remove_btn.onclick = function(){
+        var faqId = this.faq_id;
+    
+        if (faqId) {
+            // Відправка HTTP-запиту на сервер
+            fetch('/deleteFaq', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: faqId
+                    }),
+                })
+                .then((response) => response.text())
+                .then((result) => {
+                    console.log(result); // Вивід результату в консоль
+                    getFAQs(); // Оновлення таблиці після видалення
+                })
+                .catch((error) => {
+                    console.error('Помилка:', error);
+                });
+            } else {
+                console.error('Ідентифікатор не визначений');
+            }
+        }
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        row.appendChild(edit_btn);
+        row.appendChild(remove_btn);
+        table.appendChild(row);
     }
+    const faq_sum_el = document.getElementById('faq_sum')
+    faq_sum_el.textContent='Всього питань: '+data.length
 }
 
 function getFAQs(){
