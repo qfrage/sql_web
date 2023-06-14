@@ -121,6 +121,7 @@ th{
     text-align: left;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
+    user-select: none;
 }
 .faq_edit_btn:hover{
     color:blue;
@@ -131,6 +132,7 @@ th{
     text-align: left;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
+    user-select: none;
 }
 .faq_remove_btn:hover{
     color:blue;
@@ -251,3 +253,23 @@ span {
   .dialog-save:hover {
     color: #666;
   }
+
+  .input-field {
+    width: 20%;
+    padding: 8px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-field::placeholder {
+    color: #999;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0 0 8px #66afe9;
+}

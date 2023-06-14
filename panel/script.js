@@ -239,3 +239,31 @@ var addButton = document.querySelector('.add-button');
 addButton.addEventListener('click', function() {
   openDialogEditFAQ();
 });
+
+// Отримуємо посилання на поле вводу
+const inputField = document.querySelector('.input-field');
+
+
+// Додаємо обробник події введення
+inputField.addEventListener('input', function(event) {
+    const inputValue = event.target.value.toLowerCase(); // Перетворюємо введене значення в нижній регістр
+    const faqRows = document.querySelectorAll('.faq_table tr'); // Отримуємо всі теги <tr> в межах таблиці
+  
+    // Перебираємо теги <tr>
+    for (const faqRow of faqRows) {
+      const faqTitle = faqRow.querySelector('.faq_title'); // Отримуємо тег <td class="faq_title">
+      const faqContent = faqRow.querySelector('.faq_content'); // Отримуємо тег <td class="faq_content">
+  
+      if (faqTitle && faqContent) {
+        const titleText = faqTitle.textContent.toLowerCase(); // Отримуємо текст тегу .faq_title в нижньому регістрі
+        const contentText = faqContent.textContent.toLowerCase(); // Отримуємо текст тегу .faq_content в нижньому регістрі
+  
+        // Перевіряємо, чи містить текст тегів введений символ
+        if (titleText.includes(inputValue) || contentText.includes(inputValue)) {
+          faqRow.style.display = 'table-row'; // Відображаємо родительський тег <tr>, якщо знайдено співпадіння
+        } else {
+          faqRow.style.display = 'none'; // Приховуємо родительський тег <tr>, якщо не знайдено співпадіння
+        }
+      }
+    }
+  });
