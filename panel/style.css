@@ -95,6 +95,42 @@ body {
     }
 }
 
+.faq_table {
+    margin-top:30px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th{
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.faq_title, .faq_content {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;        /* Скрыть все содержимое, выходящее за пределы элемента */
+    text-overflow: ellipsis; /* Обрезать текст и отобразить многоточие в конце, если текст не помещается */
+    white-space: nowrap;     /* Запретить перенос текста на новую строку */
+    max-width: 200px;        /* Задать максимальную ширину элемента */
+  }
+.faq_edit_btn{
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+.faq_edit_btn:hover{
+    color:blue;
+    cursor:default;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
 /* Стили для элементов li и span */
 li {
     display: block;
@@ -129,3 +165,71 @@ span {
 .active {
     display: block;
 }
+
+/* CSS стили для диалогового окна */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .dialog-box {
+    background-color: #fff;
+    width: 700px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .dialog-content {
+    margin-bottom: 10px;
+  }
+
+  .dialog-input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .dialog-textarea {
+    display: block;
+    width: 100%;
+    height: 400px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none;
+    overflow-y: auto;
+  }
+
+  .dialog-close {
+    cursor: pointer;
+    color: #999;
+    float: right;
+  }
+  .dialog-save {
+    margin-right:10px;
+    cursor: pointer;
+    color: #999;
+    float: right;
+  }
+
+  .dialog-close:hover {
+    color: #666;
+  }
+  .dialog-save:hover {
+    color: #666;
+  }
