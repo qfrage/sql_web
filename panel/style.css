@@ -48,7 +48,8 @@ body {
     padding: 10px;
     color: #fff;
     text-decoration: none;
-}
+    text-align: center; /* Добавлено для центрирования текста */
+  }
 
 .menu a:hover {
     background-color: #555;
@@ -106,6 +107,9 @@ th{
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
+#faq_sum{
+    font-size:20px;
+}
 
 .faq_title, .faq_content {
     padding: 8px;
@@ -152,6 +156,7 @@ li {
     background-color: green;
     color: white;
     padding: 10px 20px;
+    font-size:14px;
     margin:10px;
     border: none;
     border-radius: 5px;
