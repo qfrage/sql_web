@@ -62,12 +62,10 @@ app.get('/panel/style.css', (req, res) => {
   }
 });
 
-// Код на серверній стороні (приклад використання Express.js)
 app.post('/deleteFaq', (req, res) => {
   connectToDB();
-  const { id } = req.body; // Отримання даних з запиту
+  const { id } = req.body;
 
-  // Виконання операції видалення з бази даних
   const sql = `DELETE FROM faqs WHERE id = ?`;
   db.run(sql, [id], function (err) {
     if (err) {
@@ -82,12 +80,10 @@ app.post('/deleteFaq', (req, res) => {
 });
 
 
-// Обработчик HTTP-запроса для обновления записи faq
 app.post('/updateFaq', (req, res) => {
   connectToDB();
-  const { id, title, content } = req.body; // Получение данных из запроса
+  const { id, title, content } = req.body; 
 
-  // Проверяем, чи існує рядок з вказаним id
   const checkSql = 'SELECT COUNT(*) AS count FROM faqs WHERE id = ?';
   db.get(checkSql, [id], function (err, row) {
     if (err) {
@@ -99,7 +95,6 @@ app.post('/updateFaq', (req, res) => {
     const count = row.count;
 
     if (count === 0) {
-      // Рядок з вказаним id не існує, додаємо новий запис
       const insertSql = 'INSERT INTO faqs (id, title, content) VALUES (?, ?, ?)';
       db.run(insertSql, [id, title, content], function (err) {
         if (err) {
@@ -110,7 +105,6 @@ app.post('/updateFaq', (req, res) => {
         }
       });
     } else {
-      // Рядок з вказаним id існує, виконуємо оновлення
       const updateSql = 'UPDATE faqs SET title = ?, content = ? WHERE id = ?';
       db.run(updateSql, [title, content, id], function (err) {
         if (err) {
@@ -127,7 +121,6 @@ app.post('/updateFaq', (req, res) => {
 });
 
 
-// Обработчик GET-запроса на /api/faq
 app.get('/api/users', (req, res) => {
   const sql = 'SELECT * FROM users';
   connectToDB();
@@ -142,7 +135,6 @@ app.get('/api/users', (req, res) => {
   closeDBConnection();
 });
 
-// Обработчик GET-запроса на /api/faq
 app.get('/api/faq', (req, res) => {
   const sql = 'SELECT * FROM faqs';
   connectToDB();
@@ -164,7 +156,7 @@ app.get('/panel/script.js', (req, res) => {
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  req.session.isAuthenticated = true; // Устанавливаем флаг аутентификации в сессии
+  req.session.isAuthenticated = true; 
   res.redirect('/panel/main_page');
   // connection.query(
   //     'SELECT * FROM admins WHERE login = ? AND password = ?',
