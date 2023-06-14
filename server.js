@@ -112,7 +112,7 @@ app.post('/updateFaq', (req, res) => {
   db.get(checkSql, [id], function (err, row) {
       if (err) {
           console.error(err.message);
-          res.status(500).send('Произошла ошибка при проверке записи.');
+          res.status(500).send('Виникла помилка при збереженні.');
           return;
       }
 
@@ -124,9 +124,9 @@ app.post('/updateFaq', (req, res) => {
           db.run(insertSql, [id, title, content], function (err) {
               if (err) {
                   console.error(err.message);
-                  res.status(500).send('Произошла ошибка при добавлении записи.');
+                  res.status(500).send('Виникла помилка при збереженні.');
               } else {
-                  res.send('Запись успешно добавлена.');
+                  res.send('Збережено!');
               }
           });
       } else {
@@ -135,9 +135,9 @@ app.post('/updateFaq', (req, res) => {
           db.run(updateSql, [title, content, id], function (err) {
               if (err) {
                   console.error(err.message);
-                  res.status(500).send('Произошла ошибка при обновлении записи.');
+                  res.status(500).send('Виникла помилка при оновленні запису.');
               } else {
-                  res.send('Запись успешно обновлена.');
+                  res.send('Збережено.');
               }
           });
       }

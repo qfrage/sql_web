@@ -4,6 +4,8 @@ const tabContents = document.querySelectorAll(".tabcontent");
 // Отримати всі елементи tablinks
 const tabLinks = document.querySelectorAll(".menu a");
 
+var allFAQs = -1;
+
 // Додати обробники подій кліку на заголовки списку та на піделементи
 var toggles = document.getElementsByClassName("toggle");
 for (var i = 0; i < toggles.length; i++) {
@@ -76,15 +78,15 @@ function openDialogEditFAQ() {
             })
             .then((response) => response.text())
             .then((result) => {
-                console.log(result); // Вивід результату в консоль
+                showPopup(result); // Вивід результату в консоль
                 dialogOverlay.remove();
                 getFAQs();
             })
             .catch((error) => {
-                alert('Сталася помилка:'+ error);
+                showPopup('Сталася помилка:'+ error);
             });
         } else {
-            alert('Не всі поля заповнені');
+            showPopup('Не всі поля заповнені');
         }
     };
 
@@ -165,7 +167,7 @@ function fillTable(data) {
                 })
                 .then((response) => response.text())
                 .then((result) => {
-                    console.log(result); // Вивід результату в консоль
+                    showPopup(result); // Вивід результату в консоль
                     getFAQs(); // Оновлення таблиці після видалення
                 })
                 .catch((error) => {
@@ -183,6 +185,7 @@ function fillTable(data) {
     }
     const faq_sum_el = document.getElementById('faq_sum')
     faq_sum_el.textContent='Всього питань: '+data.length
+    allFAQs = data.length;
 }
 
 function getFAQs(){
@@ -267,3 +270,62 @@ inputField.addEventListener('input', function(event) {
       }
     }
   });
+
+  function checkUpdateInDB() {
+    // Ваш код або дії, які потрібно виконати
+    const tab = document.getElementById('faqs');
+    if(tab.classList.contains("active")){
+        fetch('/api/faq')
+        .then(response => response.json())
+        .then(data => {
+        // Обробка отриманої JSON-відповіді
+        if(allFAQs != data.length){
+            showPopup("База даних оновилась!");
+            allFAQs = data.length;
+            getFAQs();
+        }   
+        })
+        .catch(error => {
+        // Обробка помилок
+        console.error('Помилка при отриманні даних:', error);
+        });
+    }
+}
+  
+// Виклик функції кожні 5 секунд
+setInterval(checkUpdateInDB, 5000);
+
+function showPopup(text) {
+    const popupContainer = document.createElement('div');
+    const popupText = document.createElement('p');
+  
+    popupText.textContent = text;
+  
+    popupContainer.classList.add('popup-container');
+    popupText.classList.add('popup-text');
+  
+    popupContainer.appendChild(popupText);
+  
+    document.body.appendChild(popupContainer);
+  
+    // Перемещаем существующие окна вниз
+    const existingPopups = document.querySelectorAll('.popup-container');
+    existingPopups.forEach((popup, index) => {
+      popup.style.transform = `translateY(${index * 80}px)`;
+    });
+  
+    // Закрытие окна через 3 секунды
+    setTimeout(function() {
+      // Удаляем окно после окончания анимации
+      popupContainer.classList.add('popup-fade-out');
+      setTimeout(function() {
+        document.body.removeChild(popupContainer);
+  
+        // Восстанавливаем позиции существующих окон
+        const remainingPopups = document.querySelectorAll('.popup-container');
+        remainingPopups.forEach((popup, index) => {
+          popup.style.transform = `translateY(${index * 80}px)`;
+        });
+      }, 500); // Задержка 500 миллисекунд для завершения анимации
+    }, 3000); // Закрытие окна через 3 секунды
+  }
