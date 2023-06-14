@@ -25,6 +25,10 @@ for (var i = 0; i < subtopics.length; i++) {
     });
 }
 
+function saveFAQdb(){
+    
+}
+
 function openDialogEditFAQ() {
     // Создание диалогового окна
     var dialogOverlay = document.createElement('div');
@@ -47,6 +51,45 @@ function openDialogEditFAQ() {
     textareaField.classList.add('dialog-textarea');
     textareaField.value = this.answer;
 
+    // Кнопка сохранить
+    var saveButton = document.createElement('span');
+    saveButton.classList.add('dialog-save');
+    saveButton.textContent = 'Сохранить';
+    var sql_id = this.faq_id
+    saveButton.onclick = function(){
+        // Получение значений полей ввода
+        const titleInput = document.querySelector('.dialog-input');
+        const contentTextarea = document.querySelector('.dialog-textarea');
+        const f_id = sql_id; // Идентификатор записи, которую нужно обновить
+    
+        // Проверка наличия значений
+        if (f_id && titleInput && contentTextarea) {
+            // Отправка HTTP-запроса на сервер
+            fetch('/updateFaq', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: f_id,
+                    title: titleInput.value,
+                    content: contentTextarea.value,
+                }),
+            })
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result); // Вывод результата в консоль
+                dialogOverlay.remove();
+                getFAQs();
+            })
+            .catch((error) => {
+                console.error('Произошла ошибка:', error);
+            });
+        } else {
+            console.error('Значения не определены');
+        }
+    };
+
     // Кнопка закрытия
     var closeButton = document.createElement('span');
     closeButton.classList.add('dialog-close');
@@ -62,6 +105,8 @@ function openDialogEditFAQ() {
     dialogBox.appendChild(inputField);
     dialogBox.appendChild(textareaField);
     dialogBox.appendChild(closeButton);
+    dialogBox.appendChild(saveButton);
+
 
     // Добавление диалогового окна в DOM
     dialogOverlay.appendChild(dialogBox);
@@ -94,9 +139,9 @@ function fillTable(data) {
       cell1.classList.add('faq_title')
       cell2.classList.add('faq_content')
       edit_btn.classList.add('faq_edit_btn')
-      edit_btn.faq_id = rowData.sql_id;
       cell1.textContent = rowData.question;
       cell2.textContent = rowData.answer;
+      edit_btn.faq_id = rowData.sql_id;
       edit_btn.answer = rowData.answer;
       edit_btn.question = rowData.question; 
       edit_btn.textContent = 'Edit'
@@ -108,6 +153,24 @@ function fillTable(data) {
     }
 }
 
+function getFAQs(){
+    var dataArray = [
+    ];
+    fetch('/api/faq')
+    .then(response => response.json())
+    .then(data => {
+      // Обработка полученного JSON-ответа
+      data.forEach(element => {
+          dataArray.push({sql_id:element.id,question:element.title,answer:element.content});
+      });
+      // Вызываем функцию для заполнения таблицы
+      fillTable(dataArray);   
+    })
+    .catch(error => {
+      // Обработка ошибок
+      console.error('Ошибка при получении данных:', error);
+    });
+}
 // Loop through the tablinks elements and add the active class to the current/clicked tablink
 for (const tabLink of tabLinks) {
     tabLink.addEventListener("click", function (e) {
@@ -131,23 +194,7 @@ for (const tabLink of tabLinks) {
         // Show the selected tabcontent
         document.getElementById(tabId).classList.add("active");
         if(tabId == "faqs"){
-            var dataArray = [
-              ];
-              fetch('/api/faq')
-              .then(response => response.json())
-              .then(data => {
-                // Обработка полученного JSON-ответа
-                data.forEach(element => {
-                    dataArray.push({sql_id:element.id,question:element.title,answer:element.content});
-                });
-                // Вызываем функцию для заполнения таблицы
-                fillTable(dataArray);   
-              })
-              .catch(error => {
-                // Обработка ошибок
-                console.error('Ошибка при получении данных:', error);
-              });
-              
+            getFAQs();  
         }
     });
 }

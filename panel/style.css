@@ -220,7 +220,16 @@ span {
     color: #999;
     float: right;
   }
+  .dialog-save {
+    margin-right:10px;
+    cursor: pointer;
+    color: #999;
+    float: right;
+  }
 
   .dialog-close:hover {
+    color: #666;
+  }
+  .dialog-save:hover {
     color: #666;
   }

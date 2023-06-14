@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
 const session = require('express-session');
 const sqlite3 = require('sqlite3').verbose();
 const dbPath = './database.db';
+const app = express();
+
+app.use(bodyParser.json());
 var db = -1;
 
 // Создание подключения
@@ -79,6 +81,24 @@ app.get('/panel/style.css', (req, res) => {
         res.redirect('/');
     }
 });
+
+// Обработчик HTTP-запроса для обновления записи faq
+app.post('/updateFaq', (req, res) => {
+    connectToDB();
+    const { id,title, content } = req.body; // Получение данных из запроса
+    // Выполнение операции обновления в базе данных
+    const sql = `UPDATE faqs SET title = ?, content = ? WHERE id = ?`;
+    db.run(sql, [title, content, id], function (err) {
+      if (err) {
+        console.error(err.message);
+        res.status(500).send('Произошла ошибка при обновлении записи.');
+      } else {
+        res.send('Запись успешно обновлена.');
+      }
+    });
+  closeDBConnection();
+
+  });
 
 // Обработчик GET-запроса на /api/faq
 app.get('/api/faq', (req, res) => {
