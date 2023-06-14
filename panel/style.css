@@ -48,8 +48,9 @@ body {
     padding: 10px;
     color: #fff;
     text-decoration: none;
-    text-align: center; /* Добавлено для центрирования текста */
-  }
+    text-align: center;
+    /* Добавлено для центрирования текста */
+}
 
 .menu a:hover {
     background-color: #555;
@@ -97,52 +98,68 @@ body {
 }
 
 .faq_table {
-    margin-top:30px;
+    margin-top: 30px;
     width: 100%;
     border-collapse: collapse;
 }
 
-th{
+th {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
-#faq_sum{
-    font-size:20px;
+
+#faq_sum {
+    font-size: 20px;
 }
-#users_sum{
-    font-size:20px;
+
+#users_sum {
+    font-size: 20px;
 }
-.faq_title, .faq_content,.users_name,.users_admin,.users_telegram_id,.users_blocked {
+
+.faq_title,
+.faq_content,
+.users_name,
+.users_admin,
+.users_telegram_id,
+.users_blocked {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-    overflow: hidden;        /* Скрыть все содержимое, выходящее за пределы элемента */
-    text-overflow: ellipsis; /* Обрезать текст и отобразить многоточие в конце, если текст не помещается */
-    white-space: nowrap;     /* Запретить перенос текста на новую строку */
-    max-width: 200px;        /* Задать максимальную ширину элемента */
-  }
-.faq_edit_btn{
+    overflow: hidden;
+    /* Скрыть все содержимое, выходящее за пределы элемента */
+    text-overflow: ellipsis;
+    /* Обрезать текст и отобразить многоточие в конце, если текст не помещается */
+    white-space: nowrap;
+    /* Запретить перенос текста на новую строку */
+    max-width: 200px;
+    /* Задать максимальную ширину элемента */
+}
+
+.faq_edit_btn {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
     user-select: none;
 }
-.faq_edit_btn:hover{
-    color:blue;
-    cursor:default;
+
+.faq_edit_btn:hover {
+    color: blue;
+    cursor: default;
 }
-.faq_remove_btn{
+
+.faq_remove_btn {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
     user-select: none;
 }
-.faq_remove_btn:hover{
-    color:blue;
-    cursor:default;
+
+.faq_remove_btn:hover {
+    color: blue;
+    cursor: default;
 }
 
 th {
@@ -154,16 +171,18 @@ li {
     display: block;
     margin-bottom: 10px;
 }
+
 .add-button {
     background-color: green;
     color: white;
     padding: 10px 20px;
-    font-size:14px;
-    margin:10px;
+    font-size: 14px;
+    margin: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
+}
+
 span {
     display: block;
     cursor: pointer;
@@ -205,21 +224,21 @@ span {
     justify-content: center;
     align-items: center;
     z-index: 9999;
-  }
+}
 
-  .dialog-box {
+.dialog-box {
     background-color: #fff;
     width: 700px;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  }
+}
 
-  .dialog-content {
+.dialog-content {
     margin-bottom: 10px;
-  }
+}
 
-  .dialog-input {
+.dialog-input {
     display: block;
     width: 100%;
     padding: 8px;
@@ -227,9 +246,9 @@ span {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-  }
+}
 
-  .dialog-textarea {
+.dialog-textarea {
     display: block;
     width: 100%;
     height: 400px;
@@ -240,28 +259,31 @@ span {
     box-sizing: border-box;
     resize: none;
     overflow-y: auto;
-  }
+}
 
-  .dialog-close {
+.dialog-close {
     cursor: pointer;
     color: #999;
     float: right;
-  }
-  .dialog-save {
-    margin-right:10px;
+}
+
+.dialog-save {
+    margin-right: 10px;
     cursor: pointer;
     color: #999;
     float: right;
-  }
+}
 
-  .dialog-close:hover {
+.dialog-close:hover {
     color: #666;
-  }
-  .dialog-save:hover {
-    color: #666;
-  }
+}
 
-  .input-field,.input-field-users {
+.dialog-save:hover {
+    color: #666;
+}
+
+.input-field,
+.input-field-users {
     width: 20%;
     padding: 8px;
     margin-top: 8px;
@@ -280,6 +302,7 @@ span {
     border-color: #66afe9;
     box-shadow: 0 0 8px #66afe9;
 }
+
 .popup-container {
     position: fixed;
     top: 5%;
@@ -294,14 +317,13 @@ span {
     z-index: 9999;
     opacity: 1;
     transition: transform 0.5s ease, opacity 0.5s ease;
-  }
-  
-  .popup-container.popup-fade-out {
+}
+
+.popup-container.popup-fade-out {
     opacity: 0;
     transform: translateX(-50%) translateY(120px);
-  }
-  
-  .popup-text {
+}
+
+.popup-text {
     margin-bottom: 10px;
-  }
-  
+}
