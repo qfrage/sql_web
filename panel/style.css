@@ -110,8 +110,10 @@ th{
 #faq_sum{
     font-size:20px;
 }
-
-.faq_title, .faq_content {
+#users_sum{
+    font-size:20px;
+}
+.faq_title, .faq_content,.users_name,.users_admin,.users_telegram_id,.users_blocked {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -259,7 +261,7 @@ span {
     color: #666;
   }
 
-  .input-field {
+  .input-field,.input-field-users {
     width: 20%;
     padding: 8px;
     margin-top: 8px;

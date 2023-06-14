@@ -29,26 +29,6 @@ function closeDBConnection(){
 }
 
 
-function getAllQuestions(){
-    const query = 'SELECT * FROM questions';
-
-    db.all(query, [], (err, rows) => {
-      if (err) {
-        console.error(err.message);
-        return;
-      }
-      
-      // Выводим результат в консоль
-      rows.forEach((row) => {
-        console.log(row.user_id);
-      });
-    });
-}
-
-
-
-
-
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -146,6 +126,21 @@ app.post('/updateFaq', (req, res) => {
   closeDBConnection();
 });
 
+
+// Обработчик GET-запроса на /api/faq
+app.get('/api/users', (req, res) => {
+  const sql = 'SELECT * FROM users';
+  connectToDB();
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Ошибка при получении данных' });
+    } else {
+      res.json(rows);
+    }
+  });
+  closeDBConnection();
+});
 
 // Обработчик GET-запроса на /api/faq
 app.get('/api/faq', (req, res) => {

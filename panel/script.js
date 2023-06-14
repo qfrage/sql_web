@@ -113,7 +113,62 @@ function openDialogEditFAQ() {
     document.body.appendChild(dialogOverlay);
   }
 
-function fillTable(data) {
+  function fillTableUsers(data) {
+    var table = document.querySelector('#users .users_table');
+
+    // Очищуємо існуючі значення
+    table.innerHTML = '';
+
+    // Створюємо заголовок таблиці
+    var headerRow = document.createElement('tr');
+    var headerCell1 = document.createElement('th');
+    var headerCell2 = document.createElement('th');
+    var headerCell3 = document.createElement('th');
+    var headerCell4 = document.createElement('th');
+
+
+    headerCell1.textContent = 'Name';
+    headerCell2.textContent = 'Заблокований';
+    headerCell3.textContent = 'Admin';
+    headerCell4.textContent = 'Telegram ID'
+    headerRow.appendChild(headerCell1);
+    headerRow.appendChild(headerCell2);
+    headerRow.appendChild(headerCell3);
+    headerRow.appendChild(headerCell4);
+
+
+    table.appendChild(headerRow);
+
+    // Створюємо рядки з даними
+    for (var i = 0; i < data.length; i++) {
+      var rowData = data[i];
+      var row = document.createElement('tr');
+      var name = document.createElement('td');
+      var blocked = document.createElement('td');
+      var admin = document.createElement('td');
+      var telegram_id = document.createElement('td')
+
+      name.classList.add('users_name')
+      blocked.classList.add('users_blocked')
+      admin.classList.add('users_admin');
+      telegram_id.classList.add('users_telegram_id')
+      name.textContent = rowData.user_name;
+      blocked.textContent = rowData.user_blocked
+      admin.textContent = rowData.user_admin
+      telegram_id.textContent = rowData.user_telegram_id; 
+      row.appendChild(name);
+        row.appendChild(blocked);
+        row.appendChild(admin);
+        row.appendChild(telegram_id);
+
+        table.appendChild(row);
+    }
+    const user_sum_el = document.getElementById('users_sum')
+    user_sum_el.textContent='Всього: '+data.length
+}
+
+
+function fillTableFAQ(data) {
     var table = document.querySelector('#faqs .faq_table');
 
     // Очищуємо існуючі значення
@@ -188,6 +243,25 @@ function fillTable(data) {
     allFAQs = data.length;
 }
 
+function getUsers(){
+    var dataArray = [
+    ];
+    fetch('/api/users')
+    .then(response => response.json())
+    .then(data => {
+      // Обробка отриманої JSON-відповіді
+      data.forEach(element => {
+          dataArray.push({user_telegram_id:element.user_id,user_name:element.username,user_blocked:element.is_blocked,user_admin:element.is_admin});
+      });
+      // Викликаємо функцію для заповнення таблиці
+      fillTableUsers(dataArray);   
+    })
+    .catch(error => {
+      // Обробка помилок
+      console.error('Помилка при отриманні даних:', error);
+    });
+}
+
 function getFAQs(){
     var dataArray = [
     ];
@@ -199,7 +273,7 @@ function getFAQs(){
           dataArray.push({sql_id:element.id,question:element.title,answer:element.content});
       });
       // Викликаємо функцію для заповнення таблиці
-      fillTable(dataArray);   
+      fillTableFAQ(dataArray);   
     })
     .catch(error => {
       // Обробка помилок
@@ -232,6 +306,9 @@ for (const tabLink of tabLinks) {
         if(tabId == "faqs"){
             getFAQs();  
         }
+        else if(tabId == 'users'){
+            getUsers();
+        }
     });
 }
 
@@ -243,10 +320,31 @@ addButton.addEventListener('click', function() {
   openDialogEditFAQ();
 });
 
+
 // Отримуємо посилання на поле вводу
 const inputField = document.querySelector('.input-field');
+const inputFieldUsers = document.querySelector('.input-field-users')
 
-
+inputFieldUsers.addEventListener('input', function(event) {
+    const inputValue = event.target.value.toLowerCase(); // Перетворюємо введене значення в нижній регістр
+    const faqRows = document.querySelectorAll('.users_table tr'); // Отримуємо всі теги <tr> в межах таблиці
+  
+    // Перебираємо теги <tr>
+    for (const faqRow of faqRows) {
+      const userName = faqRow.querySelector('.users_name'); 
+      const userTelegram = faqRow.querySelector('.users_telegram_id')
+      if (userName && userTelegram) {
+        const nameText = userName.textContent.toLowerCase(); // Отримуємо текст тегу
+        const telegramText = userTelegram.textContent.toLowerCase();
+        // Перевіряємо, чи містить текст тегів введений символ
+        if (nameText.includes(inputValue) || telegramText.includes(inputValue)) {
+            faqRow.style.display = 'table-row'; // Відображаємо родительський тег <tr>, якщо знайдено співпадіння
+        } else {
+            faqRow.style.display = 'none'; // Приховуємо родительський тег <tr>, якщо не знайдено співпадіння
+        }
+      }
+    }
+  });
 // Додаємо обробник події введення
 inputField.addEventListener('input', function(event) {
     const inputValue = event.target.value.toLowerCase(); // Перетворюємо введене значення в нижній регістр
