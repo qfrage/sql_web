@@ -1,10 +1,10 @@
-// Get all tabcontent elements
+// Отримати всі елементи tabcontent
 const tabContents = document.querySelectorAll(".tabcontent");
 
-// Get all tablinks elements
+// Отримати всі елементи tablinks
 const tabLinks = document.querySelectorAll(".menu a");
 
-// добавляем обработчики клика на заголовки списка и на подэлементы
+// Додати обробники подій кліку на заголовки списку та на піделементи
 var toggles = document.getElementsByClassName("toggle");
 for (var i = 0; i < toggles.length; i++) {
     toggles[i].addEventListener("click", function () {
@@ -25,12 +25,8 @@ for (var i = 0; i < subtopics.length; i++) {
     });
 }
 
-function saveFAQdb(){
-    
-}
-
 function openDialogEditFAQ() {
-    // Создание диалогового окна
+    // Створення діалогового вікна
     var dialogOverlay = document.createElement('div');
     dialogOverlay.classList.add('dialog-overlay');
 
@@ -39,32 +35,32 @@ function openDialogEditFAQ() {
 
     // Заголовок
     var dialogTitle = document.createElement('h2');
-    dialogTitle.textContent = 'Диалоговое окно';
+    dialogTitle.textContent = 'Діалогове вікно';
 
-    // Поле ввода
+    // Поле введення
     var inputField = document.createElement('input');
     inputField.classList.add('dialog-input');
     inputField.value = this.question;
 
-    // Зона для ввода большого текста
+    // Зона для введення великого тексту
     var textareaField = document.createElement('textarea');
     textareaField.classList.add('dialog-textarea');
     textareaField.value = this.answer;
 
-    // Кнопка сохранить
+    // Кнопка зберегти
     var saveButton = document.createElement('span');
     saveButton.classList.add('dialog-save');
-    saveButton.textContent = 'Сохранить';
+    saveButton.textContent = 'Зберегти';
     var sql_id = this.faq_id
     saveButton.onclick = function(){
-        // Получение значений полей ввода
+        // Отримання значень полів введення
         const titleInput = document.querySelector('.dialog-input');
         const contentTextarea = document.querySelector('.dialog-textarea');
-        const f_id = sql_id; // Идентификатор записи, которую нужно обновить
+        const f_id = sql_id; // Ідентифікатор запису, який потрібно оновити
     
-        // Проверка наличия значений
+        // Перевірка наявності значень
         if (f_id && titleInput && contentTextarea) {
-            // Отправка HTTP-запроса на сервер
+            // Відправка HTTP-запиту на сервер
             fetch('/updateFaq', {
                 method: 'POST',
                 headers: {
@@ -78,29 +74,29 @@ function openDialogEditFAQ() {
             })
             .then((response) => response.text())
             .then((result) => {
-                console.log(result); // Вывод результата в консоль
+                console.log(result); // Вивід результату в консоль
                 dialogOverlay.remove();
                 getFAQs();
             })
             .catch((error) => {
-                console.error('Произошла ошибка:', error);
+                console.error('Сталася помилка:', error);
             });
         } else {
-            console.error('Значения не определены');
+            console.error('Значення не визначені');
         }
     };
 
-    // Кнопка закрытия
+    // Кнопка закрити
     var closeButton = document.createElement('span');
     closeButton.classList.add('dialog-close');
-    closeButton.textContent = 'Закрыть';
+    closeButton.textContent = 'Закрити';
     
     closeButton.onclick = function() {
-      // Закрытие диалогового окна
+      // Закриття діалогового вікна
       dialogOverlay.remove();
     };
 
-    // Добавление элементов в диалоговое окно
+    // Додавання елементів до діалогового вікна
     dialogBox.appendChild(dialogTitle);
     dialogBox.appendChild(inputField);
     dialogBox.appendChild(textareaField);
@@ -108,7 +104,7 @@ function openDialogEditFAQ() {
     dialogBox.appendChild(saveButton);
 
 
-    // Добавление диалогового окна в DOM
+    // Додавання діалогового вікна до DOM
     dialogOverlay.appendChild(dialogBox);
     document.body.appendChild(dialogOverlay);
   }
@@ -116,10 +112,10 @@ function openDialogEditFAQ() {
 function fillTable(data) {
     var table = document.querySelector('#faqs .faq_table');
 
-    // Очищаем существующие значения
+    // Очищуємо існуючі значення
     table.innerHTML = '';
 
-    // Создаем заголовок таблицы
+    // Створюємо заголовок таблиці
     var headerRow = document.createElement('tr');
     var headerCell1 = document.createElement('th');
     var headerCell2 = document.createElement('th');
@@ -129,7 +125,7 @@ function fillTable(data) {
     headerRow.appendChild(headerCell2);
     table.appendChild(headerRow);
 
-    // Создаем строки с данными
+    // Створюємо рядки з даними
     for (var i = 0; i < data.length; i++) {
       var rowData = data[i];
       var row = document.createElement('tr');
@@ -144,7 +140,7 @@ function fillTable(data) {
       edit_btn.faq_id = rowData.sql_id;
       edit_btn.answer = rowData.answer;
       edit_btn.question = rowData.question; 
-      edit_btn.textContent = 'Edit'
+      edit_btn.textContent = 'Редагувати'
       edit_btn.addEventListener('click', openDialogEditFAQ);
       row.appendChild(cell1);
       row.appendChild(cell2);
@@ -159,39 +155,40 @@ function getFAQs(){
     fetch('/api/faq')
     .then(response => response.json())
     .then(data => {
-      // Обработка полученного JSON-ответа
+      // Обробка отриманої JSON-відповіді
       data.forEach(element => {
           dataArray.push({sql_id:element.id,question:element.title,answer:element.content});
       });
-      // Вызываем функцию для заполнения таблицы
+      // Викликаємо функцію для заповнення таблиці
       fillTable(dataArray);   
     })
     .catch(error => {
-      // Обработка ошибок
-      console.error('Ошибка при получении данных:', error);
+      // Обробка помилок
+      console.error('Помилка при отриманні даних:', error);
     });
 }
-// Loop through the tablinks elements and add the active class to the current/clicked tablink
+
+// Прохід по елементам tablinks і додавання класу active для поточного/клікнутого tablink
 for (const tabLink of tabLinks) {
     tabLink.addEventListener("click", function (e) {
         e.preventDefault();
         const tabId = this.getAttribute("href").substring(1);
         
 
-        // Remove the active class from all tablinks
+        // Видалення класу active з усіх tablink
         for (const tabLink of tabLinks) {
             tabLink.classList.remove("active");
         }
 
-        // Add the active class to the clicked tablink
+        // Додавання класу active для клікнутого tablink
         this.classList.add("active");
 
-        // Hide all tabcontents
+        // Приховування всіх tabcontent
         for (const tabContent of tabContents) {
             tabContent.classList.remove("active");
         }
 
-        // Show the selected tabcontent
+        // Показ обраного tabcontent
         document.getElementById(tabId).classList.add("active");
         if(tabId == "faqs"){
             getFAQs();  
