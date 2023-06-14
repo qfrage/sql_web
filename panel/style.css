@@ -146,7 +146,15 @@ li {
     display: block;
     margin-bottom: 10px;
 }
-
+.add-button {
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    margin:10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 span {
     display: block;
     cursor: pointer;

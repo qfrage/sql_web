@@ -40,12 +40,14 @@ function openDialogEditFAQ() {
     // Поле введення
     var inputField = document.createElement('input');
     inputField.classList.add('dialog-input');
-    inputField.value = this.question;
+    if(this.question)inputField.value = this.question;
+    else inputField.placeholder = 'Питання'
 
     // Зона для введення великого тексту
     var textareaField = document.createElement('textarea');
     textareaField.classList.add('dialog-textarea');
-    textareaField.value = this.answer;
+    if(this.answer)textareaField.value = this.answer;
+    else textareaField.placeholder = 'Відповідь'
 
     // Кнопка зберегти
     var saveButton = document.createElement('span');
@@ -59,7 +61,7 @@ function openDialogEditFAQ() {
         const f_id = sql_id; // Ідентифікатор запису, який потрібно оновити
     
         // Перевірка наявності значень
-        if (f_id && titleInput && contentTextarea) {
+        if (titleInput.value && contentTextarea.value) {
             // Відправка HTTP-запиту на сервер
             fetch('/updateFaq', {
                 method: 'POST',
@@ -79,10 +81,10 @@ function openDialogEditFAQ() {
                 getFAQs();
             })
             .catch((error) => {
-                console.error('Сталася помилка:', error);
+                alert('Сталася помилка:'+ error);
             });
         } else {
-            console.error('Значення не визначені');
+            alert('Не всі поля заповнені');
         }
     };
 
@@ -229,3 +231,11 @@ for (const tabLink of tabLinks) {
         }
     });
 }
+
+// Знаходимо кнопку за її класом
+var addButton = document.querySelector('.add-button');
+
+// Додаємо обробник події для кнопки
+addButton.addEventListener('click', function() {
+  openDialogEditFAQ();
+});
