@@ -153,6 +153,46 @@ app.get('/panel/script.js', (req, res) => {
   res.sendFile(__dirname + '/panel/script.js');
 });
 
+
+// Обработчик POST-запроса для обновления значения is_blocked
+app.post('/update-user-blocked', (req, res) => {
+  connectToDB()
+  console.log("Blocked upd");
+
+  const { user_id, is_blocked } = req.body;
+  // Выполнение SQL-запроса для обновления значения is_blocked
+  const sql = 'UPDATE users SET is_blocked = ? WHERE user_id = ?';
+  db.run(sql, [is_blocked, user_id], function(err) {
+    if (err) {
+      console.error('Ошибка при обновлении значения is_blocked:', err);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+  closeDBConnection();
+
+});
+
+// Обработчик POST-запроса для обновления значения is_admin
+app.post('/update-user-admin', (req, res) => {
+  connectToDB();
+  console.log("Admin upd");
+  const { user_id, is_admin } = req.body;
+
+  // Выполнение SQL-запроса для обновления значения is_admin
+  const sql = 'UPDATE users SET is_admin = ? WHERE user_id = ?';
+  db.run(sql, [is_admin, user_id], function(err) {
+    if (err) {
+      console.error('Ошибка при обновлении значения is_admin:', err);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+  closeDBConnection();
+});
+
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;

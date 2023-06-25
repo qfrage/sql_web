@@ -51,7 +51,7 @@ function openDialogEditFAQ() {
     saveButton.onclick = function () {
         const titleInput = document.querySelector('.dialog-input');
         const contentTextarea = document.querySelector('.dialog-textarea');
-        const f_id = sql_id; 
+        const f_id = sql_id;
 
         if (titleInput.value && contentTextarea.value) {
             fetch('/updateFaq', {
@@ -67,7 +67,7 @@ function openDialogEditFAQ() {
             })
                 .then((response) => response.text())
                 .then((result) => {
-                    showPopup(result); 
+                    showPopup(result);
                     dialogOverlay.remove();
                     getFAQs();
                 })
@@ -109,16 +109,14 @@ function fillTableUsers(data) {
     var headerCell3 = document.createElement('th');
     var headerCell4 = document.createElement('th');
 
-
     headerCell1.textContent = 'Name';
     headerCell2.textContent = 'Заблокований';
     headerCell3.textContent = 'Admin';
-    headerCell4.textContent = 'Telegram ID'
+    headerCell4.textContent = 'Telegram ID';
     headerRow.appendChild(headerCell1);
     headerRow.appendChild(headerCell2);
     headerRow.appendChild(headerCell3);
     headerRow.appendChild(headerCell4);
-
 
     table.appendChild(headerRow);
 
@@ -128,25 +126,100 @@ function fillTableUsers(data) {
         var name = document.createElement('td');
         var blocked = document.createElement('td');
         var admin = document.createElement('td');
-        var telegram_id = document.createElement('td')
+        var telegram_id = document.createElement('td');
+        var blockButton = document.createElement('button');
+        var adminButton = document.createElement('button');
 
-        name.classList.add('users_name')
-        blocked.classList.add('users_blocked')
+        name.classList.add('users_name');
+        blocked.classList.add('users_blocked');
         admin.classList.add('users_admin');
-        telegram_id.classList.add('users_telegram_id')
+        telegram_id.classList.add('users_telegram_id');
+
         name.textContent = rowData.user_name;
-        blocked.textContent = rowData.user_blocked
-        admin.textContent = rowData.user_admin
         telegram_id.textContent = rowData.user_telegram_id;
+        blocked.textContent = rowData.user_blocked;
+        admin.textContent = rowData.user_admin;
+        blockButton.textContent = rowData.user_blocked ? 'Розблокувати' : 'Заблокувати';
+        blockButton.sql_id = rowData.user_telegram_id;
+        blockButton.status = rowData.user_blocked;
+        blockButton.classList.add("user_button");
+
+        blockButton.onclick = function () {
+            var id = this.sql_id;
+            var isBlocked = this.status;
+            var oppositeValue = isBlocked ? 0 : 1;
+            // Отправка запроса на сервер для обновления значения is_blocked
+            fetch('/update-user-blocked', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: id,
+                    is_blocked: oppositeValue
+                })
+            })
+                .then(function (response) {
+                    // Обработка ответа от сервера
+                    if (response.ok) {
+                        // Обновление значения в таблице или выполнение других действий
+                        getUsers();
+                    } else {
+                        // Обработка ошибки при обновлении значения
+                        console.error('Ошибка при обновлении значения is_blocked');
+                    }
+                })
+                .catch(function (error) {
+                    // Обработка ошибок сети или других ошибок
+                    console.error('Ошибка при выполнении запроса:', error);
+                });
+        };
+        adminButton.textContent = rowData.user_admin ? 'Забрати адмінку' : 'Видати адмінку';
+        adminButton.sql_id = rowData.user_telegram_id;
+        adminButton.status = rowData.user_admin;
+        adminButton.classList.add("user_button");
+        adminButton.onclick = function(){
+            var isAdmin = this.status;
+            var oppositeValue = isAdmin ? 0 : 1;
+            var id = this.sql_id;
+            // Отправка запроса на сервер для обновления значения is_admin
+            fetch('/update-user-admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: id,
+                    is_admin: oppositeValue
+                })
+            })
+                .then(function (response) {
+                    // Обработка ответа от сервера
+                    if (response.ok) {
+                        // Обновление значения в таблице или выполнение других действий
+                        getUsers();
+                    } else {
+                        // Обработка ошибки при обновлении значения
+                        console.error('Ошибка при обновлении значения is_admin');
+                    }
+                })
+                .catch(function (error) {
+                    // Обработка ошибок сети или других ошибок
+                    console.error('Ошибка при выполнении запроса:', error);
+                });
+        };
+
         row.appendChild(name);
         row.appendChild(blocked);
         row.appendChild(admin);
         row.appendChild(telegram_id);
-
+        row.appendChild(blockButton);
+        row.appendChild(adminButton);
         table.appendChild(row);
     }
-    const user_sum_el = document.getElementById('users_sum')
-    user_sum_el.textContent = 'Всього: ' + data.length
+
+    const user_sum_el = document.getElementById('users_sum');
+    user_sum_el.textContent = 'Всього: ' + data.length;
 }
 
 
@@ -200,8 +273,8 @@ function fillTableFAQ(data) {
                 })
                     .then((response) => response.text())
                     .then((result) => {
-                        showPopup(result); 
-                        getFAQs(); 
+                        showPopup(result);
+                        getFAQs();
                     })
                     .catch((error) => {
                         console.error('Помилка:', error);
@@ -289,8 +362,8 @@ const inputField = document.querySelector('.input-field');
 const inputFieldUsers = document.querySelector('.input-field-users')
 
 inputFieldUsers.addEventListener('input', function (event) {
-    const inputValue = event.target.value.toLowerCase(); 
-    const faqRows = document.querySelectorAll('.users_table tr'); 
+    const inputValue = event.target.value.toLowerCase();
+    const faqRows = document.querySelectorAll('.users_table tr');
 
     for (const faqRow of faqRows) {
         const userName = faqRow.querySelector('.users_name');
@@ -299,29 +372,29 @@ inputFieldUsers.addEventListener('input', function (event) {
             const nameText = userName.textContent.toLowerCase();
             const telegramText = userTelegram.textContent.toLowerCase();
             if (nameText.includes(inputValue) || telegramText.includes(inputValue)) {
-                faqRow.style.display = 'table-row'; 
+                faqRow.style.display = 'table-row';
             } else {
-                faqRow.style.display = 'none'; 
+                faqRow.style.display = 'none';
             }
         }
     }
 });
 inputField.addEventListener('input', function (event) {
-    const inputValue = event.target.value.toLowerCase(); 
-    const faqRows = document.querySelectorAll('.faq_table tr'); 
+    const inputValue = event.target.value.toLowerCase();
+    const faqRows = document.querySelectorAll('.faq_table tr');
     // Перебираємо теги <tr>
     for (const faqRow of faqRows) {
-        const faqTitle = faqRow.querySelector('.faq_title'); 
-        const faqContent = faqRow.querySelector('.faq_content'); 
+        const faqTitle = faqRow.querySelector('.faq_title');
+        const faqContent = faqRow.querySelector('.faq_content');
 
         if (faqTitle && faqContent) {
-            const titleText = faqTitle.textContent.toLowerCase(); 
+            const titleText = faqTitle.textContent.toLowerCase();
             const contentText = faqContent.textContent.toLowerCase();
 
             if (titleText.includes(inputValue) || contentText.includes(inputValue)) {
-                faqRow.style.display = 'table-row'; 
+                faqRow.style.display = 'table-row';
             } else {
-                faqRow.style.display = 'none'; 
+                faqRow.style.display = 'none';
             }
         }
     }
@@ -374,6 +447,6 @@ function showPopup(text) {
             remainingPopups.forEach((popup, index) => {
                 popup.style.transform = `translateY(${index * 80}px)`;
             });
-        }, 500); 
-    }, 3000); 
+        }, 500);
+    }, 3000);
 }

@@ -327,3 +327,33 @@ span {
 .popup-text {
     margin-bottom: 10px;
 }
+
+.user_button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-right: 20px;
+    width:200px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #4caf50;
+    transition: background-color 0.3s ease;
+  }
+  
+  .user_button:hover {
+    background-color: #45a049;
+  }
+  
+  .user_button:active {
+    background-color: #3e8e41;
+  }
+  
+  .user_button.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
