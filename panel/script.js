@@ -178,7 +178,7 @@ function fillTableUsers(data) {
         adminButton.sql_id = rowData.user_telegram_id;
         adminButton.status = rowData.user_admin;
         adminButton.classList.add("user_button");
-        adminButton.onclick = function(){
+        adminButton.onclick = function () {
             var isAdmin = this.status;
             var oppositeValue = isAdmin ? 0 : 1;
             var id = this.sql_id;
@@ -310,6 +310,33 @@ function getUsers() {
         });
 }
 
+function getDashboardInfo() {
+    var users_cnt = document.getElementById('users-cnt')
+    var questions_cnt = document.getElementById('questions-cnt')
+
+    fetch('/api/faq')
+        .then(response => response.json())
+        .then(data => {
+            questions_cnt.textContent = 'Питань: ' + data.length
+        })
+        .catch(error => {
+            console.error('Помилка при отриманні даних:', error);
+        });
+
+    fetch('/api/users')
+        .then(response => response.json())
+        .then(data => {
+            users_cnt.textContent = 'Користувачів: ' + data.length;
+
+        })
+        .catch(error => {
+            console.error('Помилка при отриманні даних:', error);
+        });
+
+
+
+}
+
 function getFAQs() {
     var dataArray = [
     ];
@@ -347,6 +374,9 @@ for (const tabLink of tabLinks) {
         }
         else if (tabId == 'users') {
             getUsers();
+        }
+        else if (tabId == 'dashboard') {
+            getDashboardInfo();
         }
     });
 }
