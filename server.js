@@ -33,9 +33,9 @@ function closeDBConnection() {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
-  secret: 'mysecret', // Секрет для подписания куки
-  resave: false, // Не сохранять сессию, если она не изменилась
-  saveUninitialized: false // Не сохранять пустую сессию
+  secret: 'mysecret', 
+  resave: false, 
+  saveUninitialized: false 
 }));
 
 app.get('/', (req, res) => {
@@ -156,23 +156,13 @@ app.get('/panel/script.js', (req, res) => {
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  req.session.isAuthenticated = true; 
-  res.redirect('/panel/main_page');
-  // connection.query(
-  //     'SELECT * FROM admins WHERE login = ? AND password = ?',
-  //     [username, password],
-  //     (error, results, fields) => {
-  //         if (error) console.log(error);
-
-  //         if (results.length > 0) {
-
-  //             // Действия, которые нужно выполнить в случае успешной аутентификации
-  //         } else {
-  //             res.send('Неверный логин или пароль');
-  //             // Действия, которые нужно выполнить в случае ошибки аутентификации
-  //         }
-  //     }
-  // );
+  if(username == 'admin' && password == 'admin'){
+    req.session.isAuthenticated = true; 
+    res.redirect('/panel/main_page');
+  }
+  else{
+    alert("Неправильно введені дані.Вхід заборонено");
+  }
 });
 
 

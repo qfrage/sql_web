@@ -32,7 +32,7 @@ function openDialogEditFAQ() {
     dialogBox.classList.add('dialog-box');
 
     var dialogTitle = document.createElement('h2');
-    dialogTitle.textContent = 'Діалогове вікно';
+    dialogTitle.textContent = 'Редагування';
 
     var inputField = document.createElement('input');
     inputField.classList.add('dialog-input');
